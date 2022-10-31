@@ -8,7 +8,7 @@ resource "random_integer" "random" {
 }
 
 resource "aws_vpc" "Week21_vpc" {
-  cidr_block       = var.vpc_cidr
+  cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
 
@@ -19,9 +19,9 @@ resource "aws_vpc" "Week21_vpc" {
 
 #Public subnets
 resource "aws_subnet" "lu-public_subnet" {
-  count = var.public_subnet_count
+  count                   = var.public_subnet_count
   vpc_id                  = aws_vpc.Week21_vpc.id
-  cidr_block             = var.public_cidrs[count.index]
+  cidr_block              = var.public_cidrs[count.index]
   map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.available.names[count.index]
 
@@ -32,16 +32,16 @@ resource "aws_subnet" "lu-public_subnet" {
 
 #Associate public subnets with routing table
 resource "aws_route_table_association" "lu_Public_assoc" {
-  count = var.public_subnet_count
+  count          = var.public_subnet_count
   subnet_id      = aws_subnet.lu-public_subnet.*.id[count.index]
   route_table_id = aws_route_table.lu_public_rt.id
 }
 
 #Private subnets
 resource "aws_subnet" "lu-private_subnet" {
-  count = var.private_subnet_count
+  count                   = var.private_subnet_count
   vpc_id                  = aws_vpc.Week21_vpc.id
-  cidr_block             = var.private_cidrs[count.index]
+  cidr_block              = var.private_cidrs[count.index]
   map_public_ip_on_launch = true
   availability_zone       = data.aws_availability_zones.available.names[count.index]
 
@@ -74,7 +74,7 @@ resource "aws_route_table" "lu_public_rt" {
 }
 
 resource "aws_default_route_table" "lu_private_rt" {
-  default_route_table_id =  aws_vpc.Week21_vpc.default_route_table_id
+  default_route_table_id = aws_vpc.Week21_vpc.default_route_table_id
 }
 
 #Create Security group
