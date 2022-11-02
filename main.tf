@@ -13,25 +13,26 @@ module "networking" {
   # enable_vpn_gateway = true
 }
 
-# module "loadbalancing" {
-#   source            = "./loadbalancing"
-#   lb_sg             = module.networking.lb_sg
-#   webserver_sg      = module.networking.webserver_sg
-#   public_subnets    = module.networking.public_subnets
-#   vpc_id            = module.networking.vpc_id
-#   tg_port           = 80
-#   tg_protocol       = "HTTP"
-#   listener_port     = 80
-#   listener_protocol = "HTTP"
-#   webserver_asg     = module.compute.webserver_asg
-# }
+module "loadbalancing" {
+  source            = "./loadbalancing"
+  lb_sg             = module.networking.lb_sg
+  public_subnets    = module.networking.public_subnets
+  vpc_id            = module.networking.vpc_id
+  tg_port           = 80
+  tg_protocol       = "HTTP"
+  listener_port     = 80
+  listener_protocol = "HTTP"
+  # webserver_asg     = module.compute.webserver_asg
+}
 
-# module "compute" {
-#   source = "./compute"
-#   instance_type = "t2.micro"
-#   public_subnets = module.networking.public_subnets
-#   private_subnets = module.networking.private_subnets
-#   webserver_sg = module.networking.webserver_sg
-#   bastion_host_sg = module.networking.bastion_host_sg
-#   key_name =        "ec2Key"
-# }
+module "compute" {
+  source = "./compute"
+  instance_type = "t2.micro"
+  public_subnets = module.networking.public_subnets
+  private_subnets = module.networking.private_subnets
+  webserver_sg = module.networking.webserver_sg
+  bastion_host_sg = module.networking.bastion_host_sg
+  key_name =        "ec2Key"
+  user_data = filebase64("./userdata.sh")
+  lb_tg = module.loadbalancing.lb_tg
+}
