@@ -31,8 +31,3 @@ resource "aws_lb_listener" "lu-lb_lst" {
   }
 }
 
-# resource "aws_lb_target_group_attachment" "test" {
-#   target_group_arn = aws_lb_target_group.lu-alb-tg.arn
-#   target_id        = aws_autoscaling_group.webserver.id
-#   port             = 80
-# }
