@@ -10,24 +10,25 @@ data "aws_ami" "instance_ami" {
   }
 }
 
+# Bastion host
 resource "aws_launch_template" "bastion_host_template" {
-  name           = "asg-template"
-  image_id       = data.aws_ami.instance_ami.id
-  instance_type  = var.instance_type
+  name                   = "asg-template"
+  image_id               = data.aws_ami.instance_ami.id
+  instance_type          = var.instance_type
   vpc_security_group_ids = [var.bastion_host_sg]
-  user_data      = var.user_data
-  
+  key_name               = aws_key_pair.lu_Key.id
+
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_autoscaling_group" "lu_bastion_host_asg" {
-  name               = "bastion-asg"
+  name                = "bastion-asg"
   vpc_zone_identifier = var.public_subnets
-  desired_capacity   = 1
-  max_size           = 1
-  min_size           = 1
+  desired_capacity    = 1
+  max_size            = 1
+  min_size            = 1
 
   launch_template {
     id      = aws_launch_template.bastion_host_template.id
@@ -35,29 +36,31 @@ resource "aws_autoscaling_group" "lu_bastion_host_asg" {
   }
 }
 
+# Webserver
 resource "aws_launch_template" "webserver" {
-  name           = "webserver"
-  image_id       = data.aws_ami.instance_ami.id
-  instance_type  = var.instance_type
+  name                   = "webserver"
+  image_id               = data.aws_ami.instance_ami.id
+  instance_type          = var.instance_type
   vpc_security_group_ids = [var.webserver_sg]
+  key_name               = aws_key_pair.lu_Key.id
+  user_data              = var.user_data
 }
 
 resource "aws_autoscaling_group" "webserver_asg" {
-  name               = "webserver_asg"
+  name                = "webserver-asg"
   vpc_zone_identifier = var.private_subnets
-  desired_capacity   = 3
-  max_size           = 4
-  min_size           = 2
-
+  desired_capacity    = 3
+  max_size            = 4
+  min_size            = 2
   launch_template {
     id      = aws_launch_template.webserver.id
     version = "$Latest"
   }
 }
 
-resource "aws_key_pair" "lu_key" {
+resource "aws_key_pair" "lu_Key" {
   key_name   = var.key_name
-  public_key = "file(var.public_key_path"
+  public_key = file(var.public_key_path)
 }
 
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
