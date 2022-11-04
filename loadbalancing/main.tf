@@ -1,6 +1,6 @@
 # -------- loadbalancing/main.tf
 
-resource "aws_lb_target_group" "lu-alb-tg" {
+resource "aws_lb_target_group" "lu_alb_tg" {
   name     = "lu-alb-tg-${substr(uuid(), 0, 3)}"
   port     = var.tg_port
   protocol = var.tg_protocol
@@ -11,7 +11,7 @@ resource "aws_lb_target_group" "lu-alb-tg" {
   }
 }
 
-resource "aws_lb" "lu-alb" {
+resource "aws_lb" "lu_alb" {
   name               = "lu-alb"
   internal           = false
   load_balancer_type = "application"
@@ -20,14 +20,14 @@ resource "aws_lb" "lu-alb" {
 }
 
 # Create Load balancer listner rule
-resource "aws_lb_listener" "lu-lb_lst" {
-  load_balancer_arn = aws_lb.lu-alb.arn
+resource "aws_lb_listener" "lu_lb_lst" {
+  load_balancer_arn = aws_lb.lu_alb.arn
   port              = var.listener_port
   protocol          = var.listener_protocol
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.lu-alb-tg.arn
+    target_group_arn = aws_lb_target_group.lu_alb_tg.arn
   }
 }
 
