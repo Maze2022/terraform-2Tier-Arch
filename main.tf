@@ -19,17 +19,19 @@ module "loadbalancing" {
   tg_protocol       = "HTTP"
   listener_port     = 80
   listener_protocol = "HTTP"
-  # webserver_asg     = module.compute.webserver_asg
+  
 }
 
 module "compute" {
-  source = "./compute"
-  instance_type = "t2.micro"
-  public_subnets = module.networking.public_subnets
+  source          = "./compute"
+  instance_type   = "t2.micro"
+  public_subnets  = module.networking.public_subnets
   private_subnets = module.networking.private_subnets
-  webserver_sg = module.networking.webserver_sg
+  webserver_sg    = module.networking.webserver_sg
   bastion_host_sg = module.networking.bastion_host_sg
-  key_name =        "ec2Key"
-  user_data = filebase64("./userdata.sh")
-  lb_tg = module.loadbalancing.lb_tg
+  key_name        = "MazeKeys"
+  public_key_path = "/home/ec2-user/.ssh/ec2Key.pub"
+  user_data       = filebase64("./userdata.sh")
+  lb_tg           = module.loadbalancing.lb_tg
+  
 }
