@@ -1,4 +1,4 @@
-# --------- root/main.tf
+# ---------root/main.tf
 
 module "networking" {
   source               = "./networking"
@@ -19,7 +19,6 @@ module "loadbalancing" {
   tg_protocol       = "HTTP"
   listener_port     = 80
   listener_protocol = "HTTP"
-  
 }
 
 module "compute" {
@@ -33,5 +32,4 @@ module "compute" {
   public_key_path = "/home/ec2-user/.ssh/ec2Key.pub"
   user_data       = filebase64("./userdata.sh")
   lb_tg           = module.loadbalancing.lb_tg
-  
 }
