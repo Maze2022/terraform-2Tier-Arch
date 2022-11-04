@@ -110,15 +110,8 @@ resource "aws_default_route_table" "default_private_rt" {
 #Create Security group
 resource "aws_security_group" "bastion_pub_sg" {
   name        = "bastion_pub_sg"
-  description = "Security group to allow inbound traffic to bastion host"
+  description = "Security group to allow SSH inbound traffic to bastion host"
   vpc_id      = aws_vpc.Week21_vpc.id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 
   ingress {
     from_port   = 22
@@ -168,8 +161,8 @@ resource "aws_security_group" "lb_sg" {
   vpc_id      = aws_vpc.Week21_vpc.id
 
   ingress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
