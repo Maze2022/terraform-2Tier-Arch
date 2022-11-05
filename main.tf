@@ -4,8 +4,8 @@ module "networking" {
   source               = "./networking"
   vpc_cidr             = "172.33.0.0/16"
   access_ip            = var.access_ip
-  private_subnet_count = 3
-  public_subnet_count  = 3
+  private_subnet_count = 4
+  public_subnet_count  = 4
   private_cidrs        = [for i in range(1, 6, 2) : cidrsubnet("172.33.0.0/16", 8, i)]
   public_cidrs         = [for i in range(2, 7, 2) : cidrsubnet("172.33.0.0/16", 8, i)]
 }
@@ -29,7 +29,6 @@ module "compute" {
   webserver_sg    = module.networking.webserver_sg
   bastion_host_sg = module.networking.bastion_host_sg
   key_name        = "MazeKeys"
-  # public_key_path = "/home/ec2-user/.ssh/ec2Key.pub"
   user_data       = filebase64("./userdata.sh")
   lb_tg           = module.loadbalancing.lb_tg
 }
