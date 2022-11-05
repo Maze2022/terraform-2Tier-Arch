@@ -6,8 +6,8 @@ module "networking" {
   access_ip            = var.access_ip
   private_subnet_count = 4
   public_subnet_count  = 4
-  private_cidrs        = [for i in range(1, 6, 2) : cidrsubnet("172.33.0.0/16", 8, i)]
-  public_cidrs         = [for i in range(2, 7, 2) : cidrsubnet("172.33.0.0/16", 8, i)]
+  private_cidrs        = [for i in range(1, 8, 2) : cidrsubnet("172.33.0.0/16", 8, i)]
+  public_cidrs         = [for i in range(2, 9, 2) : cidrsubnet("172.33.0.0/16", 8, i)]
 }
 
 module "loadbalancing" {
