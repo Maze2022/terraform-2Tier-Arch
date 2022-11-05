@@ -16,7 +16,7 @@ resource "aws_launch_template" "bastion_host_template" {
   image_id               = data.aws_ami.instance_ami.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [var.bastion_host_sg]
-  key_name               = aws_key_pair.lu_Key.id
+  key_name               = var.key_name
 
   lifecycle {
     create_before_destroy = true
@@ -42,7 +42,7 @@ resource "aws_launch_template" "webserver" {
   image_id               = data.aws_ami.instance_ami.id
   instance_type          = var.instance_type
   vpc_security_group_ids = [var.webserver_sg]
-  key_name               = aws_key_pair.lu_Key.id
+  key_name               = var.key_name
   user_data              = var.user_data
 }
 
@@ -58,10 +58,10 @@ resource "aws_autoscaling_group" "webserver_asg" {
   }
 }
 
-resource "aws_key_pair" "lu_Key" {
-  key_name   = var.key_name
-  public_key = file(var.public_key_path)
-}
+# resource "aws_key_pair" "lu_Key" {
+#   key_name   = var.key_name
+#   public_key = file(var.public_key_path)
+# }
 
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.webserver_asg.id
