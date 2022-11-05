@@ -58,11 +58,6 @@ resource "aws_autoscaling_group" "webserver_asg" {
   }
 }
 
-# resource "aws_key_pair" "lu_Key" {
-#   key_name   = var.key_name
-#   public_key = file(var.public_key_path)
-# }
-
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.webserver_asg.id
   lb_target_group_arn    = var.lb_tg
