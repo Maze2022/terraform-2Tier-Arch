@@ -29,7 +29,7 @@ module "compute" {
   webserver_sg    = module.networking.webserver_sg
   bastion_host_sg = module.networking.bastion_host_sg
   key_name        = "MazeKeys"
-  public_key_path = "/home/ec2-user/.ssh/ec2Key.pub"
+  # public_key_path = "/home/ec2-user/.ssh/ec2Key.pub"
   user_data       = filebase64("./userdata.sh")
   lb_tg           = module.loadbalancing.lb_tg
 }

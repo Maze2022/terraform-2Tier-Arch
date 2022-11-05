@@ -1,17 +1,9 @@
 # ----------- root/variables.tf
 
-variable "aws_region" {
-  default = "us-west-2"
-}
+variable "region" {}
 
-variable "access_ip" {
-  type = string
-}
+variable "access_ip" {}
 
-variable "aws_access_key" {
-  type = string
-}
+variable "access_key" {}
 
-variable "aws_secret_key" {
-  type = string
-}
+variable "secret_key" {}
